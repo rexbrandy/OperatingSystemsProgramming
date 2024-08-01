@@ -21,59 +21,20 @@ int main()
 
     while(cont_loop)
     {
-        printf("%s", getcwd())
         printf("$> ");
 
         /* read a line of text here */
         if (fgets(line, MAX_LINE, stdin) != NULL) {
-            
-            /* Remove whitespace from input */
-            line[strcspn(line, "\n")] = 0;
-
-            /*printf("Input: %s", line);*/
+            printf("Input: %s", line);
 
             tokenize(line,words,&nwords);
 
-            /* 
-                if no words inputted, go to next loop
-                
-                else if inputted cmd is exit, leave
-
-                The strcmp() compares two strings character by character.
-                If the strings are equal, the function returns 0.
-            */
-            if (nwords == 0) {
-                continue;
-            } 
-            /*
-            if (strcmp(words[0], "exit") == 0) {
-                break;
+            for (int i=0; i<nwords; i++){
+                printf("%s\r\n", words[i]);
             }
-            */
-
-            pid_t pid;
-
-            switch (pid = fork())
-            {
-            case -1:
-                perror("Unable to fork.... why?!");
-                break;
-            
-            case 0:
-                execvp(words[0], words);
-                break;
-            
-            case 1:
-                wait(NULL);
-                break;
-            default:
-                break;
-            }
-
-
+            printf("\r\n");
         } else {
             printf("Error Reading input");
-            continue;
         }        
         /* More to do here */
 
