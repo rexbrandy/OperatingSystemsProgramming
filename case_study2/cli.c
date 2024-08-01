@@ -21,7 +21,6 @@ int main()
 
     while(cont_loop)
     {
-        printf("%s", getcwd())
         printf("$> ");
 
         /* read a line of text here */
@@ -37,19 +36,21 @@ int main()
             /* 
                 if no words inputted, go to next loop
                 
-                else if inputted cmd is exit, leave
+            */
+            if (nwords == 1 && words[0] == NULL) {
+                continue;
+            } 
+            
+            /*
+                if inputted cmd is 'exit', leave
 
                 The strcmp() compares two strings character by character.
                 If the strings are equal, the function returns 0.
-            */
-            if (nwords == 0) {
-                continue;
-            } 
-            /*
+            */         
             if (strcmp(words[0], "exit") == 0) {
                 break;
             }
-            */
+            
 
             pid_t pid;
 
@@ -65,8 +66,6 @@ int main()
             
             case 1:
                 wait(NULL);
-                break;
-            default:
                 break;
             }
 
