@@ -16,44 +16,50 @@ void tokenize(char *line, char **words, int *nwords);
 
 int main()
 {
-    char line[MAX_LINE], *words[MAX_WORDS], message[MAX_LINE];
+    char line[MAX_LINE], *words[MAX_WORDS], message[MAX_LINE], buff[FILENAME_MAX];
     int cont_loop = 1, nwords=0;
+
 
     while(cont_loop)
     {
-        printf("$> ");
+        /* 
+        My CLI shows you the current working dir in the prompt line
+        getcwd() - gets current dir and puts it in buff, FILENAME_MAX is the max length of the buff
+         */
+        getcwd(buff, FILENAME_MAX);
+        printf("%s$> ", buff);
 
-        /* read a line of text here */
+        /* read a line of text here and store it in `line`*/
         if (fgets(line, MAX_LINE, stdin) != NULL) {
-            
-            /* Remove whitespace from input */
+
+            /* Remove whitespace from line */
             line[strcspn(line, "\n")] = 0;
 
-            /*printf("Input: %s", line);*/
-
+            /* tokenize function splits line and places each word into `words` */
             tokenize(line,words,&nwords);
 
-            /* 
-                if no words inputted, go to next loop
-                
-            */
+            /* if no words inputted, go to next loop */
             if (nwords == 1 && words[0] == NULL) {
                 continue;
             } 
             
             /*
-                if inputted cmd is 'exit', leave
+            if inputted cmd is 'exit', leave
 
-                The strcmp() compares two strings character by character.
-                If the strings are equal, the function returns 0.
+            The strcmp() compares two strings character by character.
+            If the strings are equal, the function returns 0.
             */         
-            if (strcmp(words[0], "exit") == 0) {
+            if (strcmp(words[0], "exit") == 0) { /* if inputted cmd is 'exit', leave */
                 break;
+            } else if (strcmp(words[0], "cd") == 0) { /* you can't run `cd` with exec() so we check here before we fork anything */
+                chdir(words[1]);
+                continue;
             }
-            
+ 
+            /* stdout needs to be flushed to prevent weird behaviour */
+            fflush(stdout);
 
             pid_t pid;
-
             switch (pid = fork())
             {
             case -1:
@@ -61,10 +67,12 @@ int main()
                 break;
             
             case 0:
-                execvp(words[0], words);
+                if (execvp(words[0], words) < 0) {
+                    perror("Command exec error");
+                }
                 break;
             
-            case 1:
+            default:
                 wait(NULL);
                 break;
             }
