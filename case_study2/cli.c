@@ -24,6 +24,8 @@ int main()
     {
         /* 
         My CLI shows you the current working dir in the prompt line
+
+        FILENAME_MAX comes from <stdio.h>
         getcwd() - gets current dir and puts it in buff, FILENAME_MAX is the max length of the buff
          */
         getcwd(buff, FILENAME_MAX);
@@ -63,16 +65,19 @@ int main()
             switch (pid = fork())
             {
             case -1:
+                /* if pid -1 - then forking failed */
                 perror("Unable to fork.... why?!");
                 break;
             
             case 0:
+                /* pid 0 - we are in the child */
                 if (execvp(words[0], words) < 0) {
                     perror("Command exec error");
                 }
                 break;
             
             default:
+                /* Wheres my kids */
                 wait(NULL);
                 break;
             }
