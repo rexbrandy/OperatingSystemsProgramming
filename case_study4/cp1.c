@@ -38,6 +38,8 @@ int main(int ac, char *av[])
 		exit(1);
 	}
 
+
+
 	if ((in_fd = open(av[1], O_RDONLY)) == -1) {
 		oops("Cannot open ", av[1]);
 	}
@@ -58,10 +60,19 @@ int main(int ac, char *av[])
 	// checks iif dir then true
 	// if no dst_err then a file exists in the destination
 	if (dst_err == 0 && S_ISDIR(dst.st_mode)) {
+		// We need to create the path by using the dir and appending
+		// the file to the end
 		char file_path[512];
-		printf("%s\r\n\r\n", strrchr(av[1], '/') + 1);
 
-		if ((out_fd = creat(av[2], src.st_mode)) == -1){
+		// This checks if the last character is /
+		// if it is we change it to null '/0'
+		if(strcmp(&av[2][strlen(av[2])-1], "/") == 0) {
+			av[2][strlen(av[2])-1] = '\0';
+		}
+
+		snprintf(file_path, 512, "%s/%s", av[2], av[1]);
+
+		if ((out_fd = creat(file_path, src.st_mode)) == -1){
 			oops("Cannot creat into directory", av[2]);
 		}
 	} else {
@@ -72,7 +83,7 @@ int main(int ac, char *av[])
 			oops("Cannot creat", av[2]);
 		}
 	}
-
+	exit(1);
 
 	while ((n_chars = read(in_fd, buf, BUFFERSIZE)) > 0){
 		if (write(out_fd, buf, n_chars) != n_chars){
