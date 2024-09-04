@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <string.h>
 
 #define BUFFERSIZE 4096
 #define COPYMODE 0644
@@ -36,30 +37,35 @@ int main(int ac, char *av[])
 		fprintf(stderr, "usage: %s source destination\n", *av);
 		exit(1);
 	}
-    
-    src_err = stat(av[1], &src);
-    dst_err = stat(av[2], &dst);
-
-    if (src_err == -1 | dst_err == -1) {
-        oops("Error getting stat", (src_err == -1) ? av[1] : av[2] );
-    }
 
 	if ((in_fd = open(av[1], O_RDONLY)) == -1) {
 		oops("Cannot open ", av[1]);
 	}
+    
+    src_err = stat(av[1], &src);
+    dst_err = stat(av[2], &dst);
 
-    if (src.st_ino == dst.st_ino) {
-        // If inode number of files is the same
-        // then they are the same file
-        // and we don't need to do anything
-        exit(1);
-    }
+    if (src_err == -1) {
+        oops("Error getting src stat", av[1]);
+    } else if (dst_err == 0 && src.st_ino == dst.st_ino) {
+		// if no dst_err then a file exists in the destination
+		// if the dst inode number and src inode number are the same
+		// then it's the same file and we do nothing
+		exit(1);
+	}
 
-	if (S_ISDIR(src.st_mode)) {
+	// S_ISDIR() comes from sys/stat.h
+	// checks iif dir then true
+	// if no dst_err then a file exists in the destination
+	if (dst_err == 0 && S_ISDIR(dst.st_mode)) {
+		char file_path[512];
+		printf("%s\r\n\r\n", strrchr(av[1], '/') + 1);
+
 		if ((out_fd = creat(av[2], src.st_mode)) == -1){
 			oops("Cannot creat into directory", av[2]);
 		}
 	} else {
+		
 		// Here the permissions are used from the source file
 		// `src.st_mode` = src file permissions
 		if ((out_fd = creat(av[2], src.st_mode)) == -1){
