@@ -16,7 +16,7 @@
 
 #define BUFFERSIZE 4096
 
-void create_bak(char *file_path, int file_stmode);
+void create_bak(char *file_path, unsigned short file_stmode);
 void oops(char *, char *);
 
 int main(int ac, char *av[])
@@ -78,7 +78,7 @@ int main(int ac, char *av[])
     		int nf_err;
 			src_err = stat(file_path, &nf);
 			if (nf_err == 0) {
-				create_bak(file_path, &nf.st_mode);
+				create_bak(file_path, nf.st_mode);
 			}
 
 			if ((out_fd = creat(file_path, src.st_mode)) == -1){
@@ -86,7 +86,12 @@ int main(int ac, char *av[])
 			}
 		} else {
 			// This block is for when there is a dst file and it's not a dir
-			// We need to back it up and create the out_fd
+			// We need to back it up and create the new copy
+			create_bak(av[2], dst.st_mode);
+
+			if ((out_fd = creat(av[2], src.st_mode)) == -1){
+				oops("Cannot creat", av[2]);
+			}
 		}
 	} else {
 		// Here the permissions are used from the source file
@@ -121,24 +126,16 @@ void oops(char *s1, char *s2){
 	exit(1);
 }
 
-/* This is the backup dest code
------------------
-// File exists make a backup
-char new_name[strlen(av[2])+4];
-strcat(new_name, av[2]);
-strcat(new_name, ".bak");
-
-printf("%s", new_name);
-*/
-
-void create_bak(char * file_path, int file_stmode) {
+void create_bak(char * file_path, unsigned short file_stmode) {
+	// In this function we create the backup file.
 	int bak_in;
 	int bak_out;
 	int n_chars;
 	char bak_buf[BUFFERSIZE];
 
-	char bak[518]; // This is to make new file name
-	snprintf(bak, 518, "%s.%s", file_path, ".bak"); 
+	// This is to make new file name with '.bak' 
+	char bak[518]; 
+	snprintf(bak, 518, "%s.%s", file_path, "bak"); 
 
 	if ((bak_in = open(file_path, O_RDONLY)) == -1) {
 		oops("Cannot open ", file_path);
