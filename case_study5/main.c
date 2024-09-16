@@ -11,14 +11,15 @@
 #include"fs.h"
 /* fs.h will be found in the local path */
 
-
-
 int main(int ac, char**av)
 {
+	init_disk();
 	int choice;
-	
+
 	while(1){
 		printf("1. Init Disk\n");
+		printf("2. List Files\n");
+		printf("2. List Files\n");
 		printf("Enter your choice: ");
 		scanf("%d", &choice);
 		
@@ -26,15 +27,16 @@ int main(int ac, char**av)
 		{
 		case 1:
 			init_disk();
-			printf("Press enter to go back to menu\n");
-			getchar();
-			system("clear");
 			break;
-		
+		case 2:
+			list_files();
+			break;
+		case 3:
+
+			break;
 		default:
 			printf("Enter valid choice");
 		}
-
-		return 0;
 	}
+	return 0;
 }

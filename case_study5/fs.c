@@ -7,7 +7,7 @@
 * This is the sample file.
 */
 #include"fs.h"
-
+#include<stdio.h>
 
 uint8_t bitmap[NUMBLOCKS/8];
 struct entry directory[DIR_ENTRIES];
@@ -39,7 +39,26 @@ void init_disk() {
 		directory[i].user = -1;
 	}
 
-	for (int i = 0; i < DIR_ENTRIES; i++) {
+	// Also need to reinit disk? - does this mean set bitmap back to all 0?
+
+	/* why must these be marked
+	for (int i = 0; i < 2; i++) {
 		toggle_bit(i);
+	}
+	*/
+
+}
+
+void list_files() {
+	for (int i = 0; i < DIR_ENTRIES; i++) {
+		if (directory[i].user != -1) {
+			printf("%s.%s\r\n", directory[i].name, directory[i].extension);
+		}
+	}
+}
+
+void print_bitmap(){
+	for (int i = 0; i < (NUMBLOCKS/8); i++) {
+		printf("%d", toggle_bit(i));
 	}
 }

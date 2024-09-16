@@ -51,4 +51,8 @@ void init_disk();
 /* Initialise the disk
 */
 
+void list_files();
+/* List the files
+*/
+
 #endif
