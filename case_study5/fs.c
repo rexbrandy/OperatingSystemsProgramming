@@ -32,3 +32,14 @@ int block_status(int block)
 
 	return bitmap[elem] & mask;
 }  
+
+void init_disk() {
+	// Set all to unowned
+	for (int i = 0; i < DIR_ENTRIES; i++) {
+		directory[i].user = -1;
+	}
+
+	for (int i = 0; i < DIR_ENTRIES; i++) {
+		toggle_bit(i);
+	}
+}

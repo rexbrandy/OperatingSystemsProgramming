@@ -32,16 +32,23 @@ extern struct entry directory[DIR_ENTRIES];
 /* extern here means the variable is defined in another
 * file, prevents multiple definition errors
 */
+
 int toggle_bit(int block);
 /* Toggles the value of the bit 'block', in  the external array 'bitmap'.
 * returns the current value of the bit
 *
 *  Does NOT validate 'block'!!!
 */
+
 int block_status(int block);
 /* Returns the status of 'block', in the external array 'bitmap'
 * returns 0 if bitmap bit is 0, not 0 if bitmap bit is 1
 *
 * Does NOT validate block!!! 
 */
+
+void init_disk();
+/* Initialise the disk
+*/
+
 #endif
