@@ -41,11 +41,11 @@ void init_disk() {
 
 	// Also need to reinit disk? - does this mean set bitmap back to all 0?
 
-	/* why must these be marked
+	/* why must these be marked*/
 	for (int i = 0; i < 2; i++) {
 		toggle_bit(i);
 	}
-	*/
+	
 
 }
 
@@ -58,7 +58,12 @@ void list_files() {
 }
 
 void print_bitmap(){
-	for (int i = 0; i < (NUMBLOCKS/8); i++) {
-		printf("%d", toggle_bit(i));
+	// This shit dont work at all
+	for (int i = 0; i < NUMBLOCKS; i++) {
+		printf("%d", block_status(i) ? 1 : 0);
+		if ((i+1) % 8 == 0) {
+			printf("\r\n");
+		}
 	}
+	printf("\r\n");
 }

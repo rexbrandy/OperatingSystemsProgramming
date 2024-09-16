@@ -55,4 +55,8 @@ void list_files();
 /* List the files
 */
 
+void print_bitmap();
+/* List the files
+*/
+
 #endif

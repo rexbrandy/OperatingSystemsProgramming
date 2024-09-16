@@ -19,7 +19,7 @@ int main(int ac, char**av)
 	while(1){
 		printf("1. Init Disk\n");
 		printf("2. List Files\n");
-		printf("2. List Files\n");
+		printf("3. Print bitmap\n");
 		printf("Enter your choice: ");
 		scanf("%d", &choice);
 		
@@ -32,7 +32,7 @@ int main(int ac, char**av)
 			list_files();
 			break;
 		case 3:
-
+			print_bitmap();
 			break;
 		default:
 			printf("Enter valid choice");
