@@ -8,9 +8,11 @@
 */
 #include"fs.h"
 #include<stdio.h>
+#include<string.h>
 
 uint8_t bitmap[NUMBLOCKS/8];
 struct entry directory[DIR_ENTRIES];
+int open_file = -1;
 
 int toggle_bit(int block)
 {
@@ -52,7 +54,7 @@ void init_disk() {
 void list_files() {
 	for (int i = 0; i < DIR_ENTRIES; i++) {
 		if (directory[i].user != -1) {
-			printf("%s.%s\r\n", directory[i].name, directory[i].extension);
+			printf("file: %s.%s size: %d blocks\r\n", directory[i].name, directory[i].extension, directory[i].blockcount);
 		}
 	}
 }
@@ -62,8 +64,61 @@ void print_bitmap(){
 	for (int i = 0; i < NUMBLOCKS; i++) {
 		printf("%d", block_status(i) ? 1 : 0);
 		if ((i+1) % 8 == 0) {
-			printf("\r\n");
+			printf("  ");
 		}
 	}
 	printf("\r\n");
+}
+
+int open_create_file() {
+	char name[9], extension[4];
+	printf("Enter file name:\r\n");
+	scanf("%s", name);
+	printf("Enter file extension:\r\n");
+	scanf("%s", extension);
+				
+	// Need to assign file to use and flick first bit on
+	int first_empty;
+
+	for (int i = 0; i < DIR_ENTRIES; i++) {
+		// While looping dirs we mark which one is the first empty dir
+		if (!first_empty && directory[i].user == -1) {
+			first_empty = i;
+		}
+		// If found return file index
+		if (directory[i].user != -1 && strcmp(directory[i].name, name) && strcmp(directory[i].extension, extension)){
+			return i;
+		}
+	}
+
+	// Now we init a new file
+	printf("File not found.\r\nCreating file: %s.%s\r\n", name, extension);
+	directory[first_empty].user = 1;
+	strcpy(directory[first_empty].name, name);
+	strcpy(directory[first_empty].extension, extension);
+	directory[first_empty].blockcount = 0;
+
+
+	return first_empty;
+}
+
+void write_block_to_file(int file_index) {
+	if (directory[file_index].blockcount > 24) {
+		printf("File is full\r\n");
+	}
+
+	// Loop over blocks and find first empty block in bitmap
+	for (int i = 0; i < NUMBLOCKS; i++) {
+		// if bit == 0 then it is free
+		if (block_status(i) == 0) {
+			// mark as used
+			toggle_bit(i);
+			directory[file_index].block[directory[file_index].blockcount] = i;
+			directory[file_index].blockcount++;
+			printf("Write Successful\r\n");
+			return;
+		}
+	}
+
+	printf("Disk is full\r\n");
 }

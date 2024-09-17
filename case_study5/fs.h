@@ -33,6 +33,9 @@ extern struct entry directory[DIR_ENTRIES];
 * file, prevents multiple definition errors
 */
 
+/* Open file variable */
+extern int open_file;
+
 int toggle_bit(int block);
 /* Toggles the value of the bit 'block', in  the external array 'bitmap'.
 * returns the current value of the bit
@@ -58,5 +61,11 @@ void list_files();
 void print_bitmap();
 /* List the files
 */
+
+int open_create_file();
+/* List the files
+*/
+
+void write_block_to_file(int file_index);
 
 #endif
