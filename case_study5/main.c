@@ -26,7 +26,7 @@ int main(int ac, char**av) {
 			switch (choice)
 			{
 			case 1:
-				init_disk();
+				reinit_disk();
 				break;
 			case 2:
 				list_files();
@@ -47,6 +47,7 @@ int main(int ac, char**av) {
 			switch (choice)
 			{
 			case 1:
+				// CHECK THIS, CREATES NEW FILE INSTEAD OF OPENING OLD
 				open_file = open_create_file();
 				break;
 			case 2:
@@ -55,6 +56,10 @@ int main(int ac, char**av) {
 			case 3:
 				write_block_to_file(open_file);
 				break;
+			case 4:
+				delete_file(open_file);
+				open_file = -1;
+				break;
 			case 5:
 				open_file = -1;
 				break;
@@ -62,6 +67,7 @@ int main(int ac, char**av) {
 				printf("Enter valid choice");
 			}
 		}
+		printf("\r\n");
 	}
 	return 0;
 }
@@ -78,7 +84,7 @@ void print_menu(int file_index) {
 		printf("Open File: %s.%s\r\n", directory[file_index].name, directory[file_index].extension);
 		printf("1. Open new file\n"); // Done
 		printf("2. Read file\n"); // Done
-		printf("3. Write file\n"); // Done
+		printf("3. Write to file\n"); // Done
 		printf("4. Delete File\n"); // Make
 		printf("5. Close File\n"); // Done
 	}

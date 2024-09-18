@@ -51,23 +51,19 @@ int block_status(int block);
 */
 
 void init_disk();
-/* Initialise the disk
-*/
 
 void list_files();
-/* List the files
-*/
 
 void print_bitmap();
-/* List the files
-*/
 
 int open_create_file();
-/* List the files
-*/
 
 void write_block_to_file(int file_index);
 
 void read_file(int file_index);
+
+void delete_file(int file_index);
+
+void reinit_disk();
 
 #endif

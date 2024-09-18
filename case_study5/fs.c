@@ -41,14 +41,10 @@ void init_disk() {
 		directory[i].user = -1;
 	}
 
-	// Also need to reinit disk? - does this mean set bitmap back to all 0?
-
 	/* why must these be marked*/
 	for (int i = 0; i < 2; i++) {
 		toggle_bit(i);
 	}
-	
-
 }
 
 void list_files() {
@@ -64,7 +60,6 @@ void list_files() {
 	if (something_found == -1) {
 		printf("No files\r\n");
 	}
-	printf("\r\n");
 }
 
 void print_bitmap(){
@@ -80,7 +75,7 @@ void print_bitmap(){
 
 int open_create_file() {
 	char name[9], extension[4];
-	printf("Enter file name:\r\n");
+	printf("Enter file\r\n");
 	scanf("%s", name);
 	printf("Enter file extension:\r\n");
 	scanf("%s", extension);
@@ -94,7 +89,7 @@ int open_create_file() {
 			first_empty = i;
 		}
 		// If found return file index
-		if (directory[i].user != -1 && strcmp(directory[i].name, name) && strcmp(directory[i].extension, extension)){
+		if (directory[i].user == 1 && strcmp(directory[i].name, name) == 0 && strcmp(directory[i].extension, extension) == 0){
 			return i;
 		}
 	}
@@ -124,6 +119,7 @@ void write_block_to_file(int file_index) {
 			toggle_bit(i);
 			directory[file_index].block[directory[file_index].blockcount] = i;
 			directory[file_index].blockcount++;
+			printf("Write successful\r\n");
 			return;
 		}
 	}
@@ -133,6 +129,7 @@ void write_block_to_file(int file_index) {
 
 void read_file(int file_index) {
 	printf("file: %s.%s size: %d\r\nblocks: ", directory[file_index].name, directory[file_index].extension, directory[file_index].blockcount);
+	// for every block in block[] array print block position
 	for (int i = 0; i < directory[file_index].blockcount; i++) {
 		printf("%d, ", directory[file_index].block[i]);
 	}
@@ -145,8 +142,17 @@ void delete_file(int file_index) {
 		toggle_bit(directory[file_index].block[i]);
 		directory[file_index].block[i] = 0;
 	}
+	// Reset everything back to null
 	directory[file_index].blockcount = 0;
 	strcpy(directory[file_index].name, "\0");
 	strcpy(directory[file_index].extension, "\0");
 	directory[file_index].user = -1;
+}
+
+void reinit_disk() {
+	for (int i = 0; i < DIR_ENTRIES; i++) {
+		if (directory[i].user == 1) {
+			delete_file(i);
+		}
+	}
 }
