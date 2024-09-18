@@ -1,6 +1,4 @@
 # Practical Case Study E
-### Operating Systems Programming – COMP 3015
-### Operating Systems Programming (Advanced)– COMP 3016
 ## 1 Introduction
 In this workshop you will be implementing a file system simulator, loosely based on the historic file system used
 by the CP/M system.
