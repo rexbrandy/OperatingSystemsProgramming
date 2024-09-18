@@ -17,8 +17,8 @@ int main(int ac, char**av) {
 	// Init disk before anything starts
 	init_disk();
 	int choice;
-
-	while(1){
+	int loop = 1;
+	while(loop){
 		print_menu(open_file);
 		scanf("%d", &choice);
 
@@ -37,6 +37,9 @@ int main(int ac, char**av) {
 			case 4:
 				open_file = open_create_file();
 				break;
+			case 5:
+				loop = 0;
+				break;
 			default:
 				printf("Enter valid choice");
 			}
@@ -45,6 +48,9 @@ int main(int ac, char**av) {
 			{
 			case 1:
 				open_file = open_create_file();
+				break;
+			case 2:
+				read_file(open_file);
 				break;
 			case 3:
 				write_block_to_file(open_file);
@@ -65,12 +71,13 @@ void print_menu(int file_index) {
 		printf("1. Init disk\n"); // Done
 		printf("2. List files\n"); // Done
 		printf("3. Print bitmap\n"); // Done
-		printf("4. Open/Create file\n"); // Done
+		printf("4. Open/create file\n"); // Done
+		printf("5. End session\n"); // Done
 		printf("Enter your choice: ");
 	} else {
 		printf("Open File: %s.%s\r\n", directory[file_index].name, directory[file_index].extension);
-		printf("1. Open new file\n"); // Test
-		printf("2. Read file\n"); // Make
+		printf("1. Open new file\n"); // Done
+		printf("2. Read file\n"); // Done
 		printf("3. Write file\n"); // Done
 		printf("4. Delete File\n"); // Make
 		printf("5. Close File\n"); // Done

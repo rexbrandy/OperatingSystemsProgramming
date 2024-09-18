@@ -52,11 +52,19 @@ void init_disk() {
 }
 
 void list_files() {
+	int something_found = -1;
+
 	for (int i = 0; i < DIR_ENTRIES; i++) {
 		if (directory[i].user != -1) {
+			something_found = 1;
 			printf("file: %s.%s size: %d blocks\r\n", directory[i].name, directory[i].extension, directory[i].blockcount);
 		}
 	}
+
+	if (something_found == -1) {
+		printf("No files\r\n");
+	}
+	printf("\r\n");
 }
 
 void print_bitmap(){
@@ -78,11 +86,11 @@ int open_create_file() {
 	scanf("%s", extension);
 				
 	// Need to assign file to use and flick first bit on
-	int first_empty;
+	int first_empty = -1;
 
 	for (int i = 0; i < DIR_ENTRIES; i++) {
 		// While looping dirs we mark which one is the first empty dir
-		if (!first_empty && directory[i].user == -1) {
+		if (first_empty == -1 && directory[i].user == -1) {
 			first_empty = i;
 		}
 		// If found return file index
@@ -92,7 +100,7 @@ int open_create_file() {
 	}
 
 	// Now we init a new file
-	printf("File not found.\r\nCreating file: %s.%s\r\n", name, extension);
+	printf("File not found.\r\nCreating file: %s.%s\r\n\r\n", name, extension);
 	directory[first_empty].user = 1;
 	strcpy(directory[first_empty].name, name);
 	strcpy(directory[first_empty].extension, extension);
@@ -103,8 +111,9 @@ int open_create_file() {
 }
 
 void write_block_to_file(int file_index) {
-	if (directory[file_index].blockcount > 24) {
+	if (directory[file_index].blockcount >= 24) {
 		printf("File is full\r\n");
+		return;
 	}
 
 	// Loop over blocks and find first empty block in bitmap
@@ -115,10 +124,29 @@ void write_block_to_file(int file_index) {
 			toggle_bit(i);
 			directory[file_index].block[directory[file_index].blockcount] = i;
 			directory[file_index].blockcount++;
-			printf("Write Successful\r\n");
 			return;
 		}
 	}
 
 	printf("Disk is full\r\n");
+}
+
+void read_file(int file_index) {
+	printf("file: %s.%s size: %d\r\nblocks: ", directory[file_index].name, directory[file_index].extension, directory[file_index].blockcount);
+	for (int i = 0; i < directory[file_index].blockcount; i++) {
+		printf("%d, ", directory[file_index].block[i]);
+	}
+	printf("\r\n");
+}
+
+void delete_file(int file_index) {
+	for (int i = 0; i < directory[file_index].blockcount; i++) {
+		// Loop over block array and turn off all blocks
+		toggle_bit(directory[file_index].block[i]);
+		directory[file_index].block[i] = 0;
+	}
+	directory[file_index].blockcount = 0;
+	strcpy(directory[file_index].name, "\0");
+	strcpy(directory[file_index].extension, "\0");
+	directory[file_index].user = -1;
 }

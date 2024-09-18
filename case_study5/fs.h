@@ -68,4 +68,6 @@ int open_create_file();
 
 void write_block_to_file(int file_index);
 
+void read_file(int file_index);
+
 #endif
