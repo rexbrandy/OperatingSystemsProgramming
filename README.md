@@ -20,7 +20,3 @@ Refer to the comments in the code for more detailed explanations of the function
 ## License
 This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-## Contact
-For questions or feedback, please feel free to reach out:
-- **Email**: bailey.yates@example.com
-- **GitHub**: [github.com/your-username](https://github.com/your-username)
