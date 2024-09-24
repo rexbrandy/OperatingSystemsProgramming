@@ -23,9 +23,9 @@ main: loop
   end loop
 ```
 
+
 Your first task will be to write a program that repeatedly reads a line of input from the user, the fgets() function (see Sect. 4 for usage information of all system provided functions) will help you here. Your program should end when either end of the input file is encountered, or the exact word exit appears in the input as the only word on a line. Traditionally both the File System and Command Language are case sensitive, you should also implement this.
+
 Your next task will be to break the line up into words, which are separated by one or more spaces. The provided function tokenize() does this, and it uses strtok() internally. You may use this function if you wish, in which case you should provide documentation on its operation, or you may write your own parser.
-You should next implement the find_and_execute() section of the logic above, by creating a new process using fork(), and then use one of the exec() f amily of functions to run the program requested by the user in the text provided. If the requested program cannot be run then an appropriate error message should be displayed, perror() will help with this (as there are many reasons why this may fail), and the child process terminated.
-The CLI process must pause until the created process is concluded, wait() will need to be used here. Once the new process has finished you must decode and print out the exit status of that process.
-Once this works you should add a builtin function cd to change the working directory of the CLI. This builtin should always use the next word supplied as the directory to change to, failure to supply a destination should be treated as an error. The chdir() function will be vital here.
-Note This logic has an infinite loop in it. The appropriate place to determine when to exit is in the middle of the loop. When testing the sample code (if used) you should use the Ctrl + C key combination to break out of the program. Do not use Ctrl + Z , it does something completely different.
+
+You should next implement the find_and_execute() section of the logic above, by creating a new process using fork(), and then use one of the exec() f amily of functions to run the program requested by the user in the text provided. If the requested program
