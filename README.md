@@ -12,7 +12,7 @@ Refer to the comments in the code for more detailed explanations of the function
 - Case Study 2: Command line interface
 - Case Study 3: Message queue server/client
 - Case Study 4: Replicate builtin cp
-- Case Study 5  Replicate File system used by the CP/M system.
+- Case Study 5: Replicate File system used by the CP/M system.
 
 ## Tools & Technologies
 - **Programming Language**: C
