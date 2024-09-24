@@ -7,12 +7,12 @@ Operating Systems have a need for extremely compact data structures, as often th
 ### 2 Bit Operations
 The C programming language provides a full set of bit manipulation operators:
 
-- & bitwiseand
-- | bitwiseor
-- ˆ bitwiseexclusiveor
--  ̃ onescompliment
-- >> rightshift
-- << leftshift
+- `&` bitwiseand
+- `|` bitwiseor
+- `ˆ` bitwiseexclusiveor
+- ` ̃` onescompliment
+- `>>` rightshift
+- `<<` leftshift
 
 These operators can be used to manipulate values at the bit level. They each treat the values as if they were ‘arrays’ of bits and applies the operation to each bit in turn. There are four main operations that we perform, setting a bit, unsetting a bit, testing if a bit is set and toggling a bit.
 To set a bit we use the bitwise or operator. To do this we bitwise or our value with a mask with the bits we want to turn on set to 1 and all others 0. For example to turn on the third bit our mask would be 000001002 (the subscript 2 means that the number is expressed in binary, no subscript means decimal).
