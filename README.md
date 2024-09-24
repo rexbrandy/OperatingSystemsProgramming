@@ -7,6 +7,13 @@ This repository contains the code and associated files for the assignments and p
 
 Refer to the comments in the code for more detailed explanations of the functions and their roles.
 
+## Case Studies
+- Case Study 1: Bitwise operations
+- Case Study 2: Command line interface
+- Case Study 3: Message queue server/client
+- Case Study 4: Replicate builtin cp
+- Case Study 5  Replicate File system used by the CP/M system.
+
 ## Tools & Technologies
 - **Programming Language**: C
 - **Compiler**: GCC or any standard C/C++ compiler
